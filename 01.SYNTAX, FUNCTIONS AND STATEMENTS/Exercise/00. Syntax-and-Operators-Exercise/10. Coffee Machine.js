@@ -3,11 +3,15 @@
  * @param {Array} arr 
  */
 function solve(arr) {
+    let income = 0;
     for (let i = 0; i < arr.length; i++) {
         const order = arr[i];
         let result = processOrder(order);
-        console.log(result);
+        console.log(result[0]);
+        income += result[1];
     }
+
+    console.log(`Income Report: $${income.toFixed(2)}`);
 
     /**
      * 
@@ -50,16 +54,19 @@ function solve(arr) {
         }
 
         let result = '';
+        let income = 0;
 
         if(credit >= basePrice) {
-            result = `You ordered ${product}. Price: ${basePrice.toFixed(2)}$ Change: ${(credit - basePrice).toFixed(2)}$`
+            result = `You ordered ${product}. Price: $${basePrice.toFixed(2)} Change: $${(credit - basePrice).toFixed(2)}`
+            income = basePrice;
         } else {
-            result = `Not enough money for ${product}. Need ${(basePrice - credit).toFixed(2)}$ more`;
+            result = `Not enough money for ${product}. Need $${(basePrice - credit).toFixed(2)} more.`;
         }
 
-        return result;
+        return [result, income];
     }
 }
 
-solve(['8.00, coffee, decaf, 4',
-    '1.00, tea, 2']);
+solve(['1.00, coffee, caffeine, milk, 4', 
+'0.40, tea, milk, 2',
+    '1.00, coffee, decaf, 0']);

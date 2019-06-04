@@ -8,7 +8,7 @@ function solve(arr) {
     for (let i = 0; i < arr.length; i += 2) {
         let propName = arr[i];
         let propValue = arr[i + 1];
-        obj[propName] = propValue;
+        obj[propName] = Number(propValue);
     }
 
     console.log(obj);
