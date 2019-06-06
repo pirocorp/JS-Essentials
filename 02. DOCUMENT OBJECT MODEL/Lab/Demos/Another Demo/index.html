@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM Demo</title>
+</head>
+<body>
+    <h1 id="greeting" onclick="onHelloClick()">Hello World.</h1>
+
+    <ul class="first-list">
+        <li>Pesho</li>
+        <li>Ivan</li>
+        <li>Dragan</li>
+        <li>Stamat</li>
+        <li class="female">Mariyka</li>
+    </ul>
+
+    <ul>
+        <li>Pesho</li>
+        <li>Ivan</li>
+        <li>Dragan</li>
+        <li>Stamat</li>
+        <li>Mariyka</li>
+    </ul>
+
+    <script>
+        function onHelloClick() {
+            let messageElement = document.getElementById("greeting");
+            console.log(messageElement);
+            messageElement.innerHTML += " Hello from JS!";
+
+            let listItems = document.getElementsByTagName('li');
+            console.log(listItems[7]);
+
+            let firstListElement = document.getElementsByClassName("first-list");
+            console.log(firstListElement);
+            firstListElement[0].innerHTML += '<li>Super Pesho</li>'
+            firstListElement[0].style.backgroundColor = '#0FF';
+
+            let queryElement = document.querySelectorAll('ul.first-list li.female');
+            console.log(queryElement);
+        }
+    </script>
+</body>
+</html>
