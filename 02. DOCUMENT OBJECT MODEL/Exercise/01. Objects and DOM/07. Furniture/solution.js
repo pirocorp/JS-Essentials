@@ -1,91 +1,79 @@
 function solve() {
-    let buttons = document.getElementsByTagName("button");
+    function objectGenerator(object) {
+        let trElement = document.createElement('tr');
+        let imgElementTd = document.createElement('td');
+        imgElementTd.innerHTML = `<img src="${object.img}">`;
 
-    let textAreas = document.getElementsByTagName("textarea");
-    let inputTextAreaElement = textAreas[0];
-    let outputTextAreaElement = textAreas[1];
+        document
+            .getElementsByTagName('tbody')[0]
+            .appendChild(trElement);
 
-    let generateButton = buttons[0];
-    generateButton.addEventListener("click", onClickGenerateButtonEventHandler);
+        trElement.appendChild(imgElementTd);
 
-    let buyButton = buttons[1];
-    buyButton.addEventListener("click", onClickBuyButtonEventHandler);
+        let nameElementTd = document.createElement('td');
+        let nameElementP = document.createElement('p');
 
-    function onClickBuyButtonEventHandler(e) {
-        let checkedElements = Array.from(document.querySelectorAll("input[type=checkbox]:checked"));
-        let tableRowElements = checkedElements.map(x => x.parentElement.parentElement);
-        
-        let furnitures = tableRowElements
-            .map(x => x.children[1].children[0].innerHTML)
-            .join(', ');
+        nameElementP.textContent = object.name;
+        nameElementTd.appendChild(nameElementP);
+        trElement.appendChild(nameElementTd);
 
-        let prices = tableRowElements
-            .map(x => x.children[2].children[0].innerHTML)
-            .reduce((a, b) => +a + +b, 0)
-            .toFixed(2);
+        let priceElementTd = document.createElement('td');
+        let priceElementP = document.createElement('p');
 
-        let decFactorCount = tableRowElements
-            .map(x => x.children[3].children[0].innerHTML)
-            .length;
+        priceElementP.textContent = object.price;
+        priceElementTd.appendChild(priceElementP);
+        trElement.appendChild(priceElementTd);
 
-        let averageDec = tableRowElements
-            .map(x => x.children[3].children[0].innerHTML)
-            .reduce((a, b) => +a + +b, 0);
+        let decFactorElementTd = document.createElement('td');
+        let decFactorElementP = document.createElement('p');
 
-        averageDec = averageDec / decFactorCount;
+        decFactorElementP.textContent = object.decFactor;
+        decFactorElementTd.appendChild(decFactorElementP);
+        trElement.appendChild(decFactorElementTd);
 
-        outputTextAreaElement.value = '';
-        outputTextAreaElement.value += `Bought furniture: ${furnitures}\n`;
-        outputTextAreaElement.value += `Total price: ${prices}\n`;
-        outputTextAreaElement.value += `Average decoration factor: ${averageDec}\n`;
+        let checkboxTd = document.createElement('td');
+        checkboxTd.innerHTML = '<input type="checkbox">';
+        trElement.appendChild(checkboxTd);
     }
 
-    function onClickGenerateButtonEventHandler(e) {
-        let jsonString = inputTextAreaElement.value;
+    function generate() {
+        let objects = JSON.parse(document.getElementsByTagName('textarea')[0].value);
+        objects.forEach(function (object) { objectGenerator(object) });
+    }
 
-        if(!jsonString) {
-            return
+    function buy() {
+        let boughtFurniture = [];
+        let totalPrice = 0;
+        let avgDecFactor = 0;
+        let count = 0;
+
+        let allTrElements = Array.from(document.getElementsByTagName('tr'));
+
+        for (let i = 1; i < allTrElements.length; i++) {
+            if (allTrElements[i].children[4].children[0].checked) {
+                count += 1;
+                boughtFurniture.push(allTrElements[i].children[1].textContent.trim());
+                totalPrice += +allTrElements[i].children[2].textContent;
+                avgDecFactor += +allTrElements[i].children[3].textContent;
+            }
         }
 
-        let jsonObjects = Array.from(JSON.parse(jsonString)); 
-        jsonObjects.forEach(x => insertElement(x)); 
-        inputTextAreaElement.value = '';       
+        avgDecFactor /= count;
+
+        document
+            .getElementsByTagName('textarea')[1]
+            .value =
+            `Bought furniture: ${boughtFurniture.join(', ')}\n` +
+            `Total price: ${totalPrice.toFixed(2)}\n` +
+            `Average decoration factor: ${avgDecFactor}`;
     }
 
-    function insertElement(object) {
-        let newTableRowElement = document.createElement('tr');        
-    
-        let currentTableDataElement = document.createElement('td');            
-        let imgElement = document.createElement('img');   
-        imgElement.setAttribute("src", `${object.img}`);
-        currentTableDataElement.appendChild(imgElement);
-        newTableRowElement.appendChild(currentTableDataElement);
+    let firstCheckboxTd = document.getElementsByTagName('td')[4];
+    firstCheckboxTd.innerHTML = '<input type="checkbox">';
 
-        currentTableDataElement = document.createElement('td');
-        let pElement = document.createElement('p');
-        pElement.innerHTML = object.name;
-        currentTableDataElement.appendChild(pElement);
-        newTableRowElement.appendChild(currentTableDataElement)
+    let generateButton = document.getElementsByTagName('button')[0];
+    generateButton.addEventListener('click', generate);
 
-        currentTableDataElement = document.createElement('td');
-        pElement = document.createElement('p');
-        pElement.innerHTML = object.price;
-        currentTableDataElement.appendChild(pElement);
-        newTableRowElement.appendChild(currentTableDataElement)
-
-        currentTableDataElement = document.createElement('td');
-        pElement = document.createElement('p');
-        pElement.innerHTML = object.decFactor;
-        currentTableDataElement.appendChild(pElement);
-        newTableRowElement.appendChild(currentTableDataElement)
-
-        currentTableDataElement = document.createElement('td');
-        let inputElement = document.createElement('input');
-        inputElement.setAttribute("type", "checkbox");
-        currentTableDataElement.appendChild(inputElement);
-        newTableRowElement.appendChild(currentTableDataElement);
-
-        let tbodyElement = document.querySelector('table tbody');
-        tbodyElement.appendChild(newTableRowElement);
-    }
+    let buyButton = document.getElementsByTagName('button')[1];
+    buyButton.addEventListener('click', buy);
 }
