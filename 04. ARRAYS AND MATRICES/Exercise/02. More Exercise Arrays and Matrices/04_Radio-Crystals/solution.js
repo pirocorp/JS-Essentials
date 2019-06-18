@@ -10,6 +10,8 @@ function solve() {
         let currentCrystal = +arr[i];
         processCrystal(currentCrystal, desiredThickness);
     }
+	
+	inputElement.value = '';
 
     /**
      * 
