@@ -14,17 +14,23 @@
     </div>
 
     <script>
-        const gameStartElement = document.querySelector('.game-start');
-        const gameAreaElement = document.querySelector('.game-area');
-        const gameOverElement = document.querySelector('.game-over');
-        const gameScoreElement = document.querySelector('.game-score');
+        const gameStart = document.querySelector('.game-start');
+        const gameArea= document.querySelector('.game-area');
+        const gameOver= document.querySelector('.game-over');
+        const gameScore = document.querySelector('.game-score');
 
-        gameStartElement.addEventListener('click', onGameStart);
+        gameStart.addEventListener('click', onGameStart);
 
         function onGameStart() {
-            gameStartElement.classList.add('hide');
+            gameStart.classList.add('hide');
 
-            //Game started
+            const wizard = document.createElement('div');
+            wizard.classList.add('wizard');
+
+            wizard.style.top = '20px';
+            wizard.style.left = '20px';
+
+            gameArea.appendChild(wizard);
         }
 
     </script>
