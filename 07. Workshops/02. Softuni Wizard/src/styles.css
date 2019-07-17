@@ -13,6 +13,10 @@ html {
     padding: 0;
 }
 
+.hide {
+    display: none;
+}
+
 .game-area {
     position: relative;
     width: 100%;
@@ -31,7 +35,7 @@ html {
     z-index: 1;
 }
 
-.score {
+.game-score {
     text-align: center;
     color: #FFF;
     background-color: #000;
