@@ -39,10 +39,12 @@
             moveMultilier: 4,
             fireBallMultiplier: 5,
             fireInterval: 500,
+            cloudSpawnInterval: 5000,
         };
 
         let scene = {
             score: 0,
+            lascCloudTimestamp: 0,
         };
 
         function onGameStart() {
@@ -65,6 +67,32 @@
         function gameAction(timestamp) {
             const wizard = document.querySelector('.wizard');
             scene.score += 0.005;
+
+            //Add clouds
+            if(timestamp - scene.lascCloudTimestamp > game.cloudSpawnInterval) {
+                let cloud = document.createElement('div');
+                cloud.classList.add('cloud');
+
+                gameArea.appendChild(cloud);
+
+                cloud.x = gameArea.offsetWidth - cloud.offsetWidth;
+                cloud.style.left = cloud.x + 'px';
+                cloud.style.top = 100 + 'px';
+
+                scene.lascCloudTimestamp = timestamp;
+            }
+
+            //Modify Clouds positions
+            let clouds = document.querySelectorAll('.cloud');
+            clouds.forEach(c =>{
+                c.x -= game.speed;
+                c.style.left = c.x + 'px';
+
+                if(c.x + c.offsetWidth <= 0) {
+                    c.parentElement.removeChild(c);
+                }
+            });
+
 
             //Modify fireballs positions
             let fireBalls = document.querySelectorAll('.fire-ball');
@@ -99,10 +127,12 @@
                 player.x += game.speed * game.moveMultilier;
             }
 
-            if(keys.Space && timestamp - player.lastFireballTimestamp > game.fireInterval) {
-                wizard.classList.add('wizard-fire');        
-                addFireBall();
-                player.lastFireballTimestamp = timestamp;
+            if(keys.Space) {
+                wizard.classList.add('wizard-fire');    
+                if (timestamp - player.lastFireballTimestamp > game.fireInterval) {
+                    addFireBall();
+                    player.lastFireballTimestamp = timestamp;
+                }                  
             } else {
                 wizard.classList.remove('wizard-fire'); 
             }
