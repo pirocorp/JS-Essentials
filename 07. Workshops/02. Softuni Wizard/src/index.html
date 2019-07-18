@@ -35,6 +35,13 @@
             wizard.style.left = '20px';
 
             gameArea.appendChild(wizard);
+
+            window.requestAnimationFrame(gameAction);
+        }
+
+        function gameAction() {
+            console.log('Action');
+            window.requestAnimationFrame(gameAction);
         }
 
         function onKeyDown(e) {
