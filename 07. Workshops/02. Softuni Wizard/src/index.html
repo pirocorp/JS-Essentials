@@ -55,11 +55,17 @@
         function gameAction() {
             const wizard = document.querySelector('.wizard');
 
+            //Apply Gravity
+            if(!isAtBottom(player, gameArea)) {
+                player.y += game.speed;
+            }
+
+            //Register user input
             if(keys.ArrowUp && player.y > 0) {
                 player.y -= game.speed * game.moveMultilier;
             }
 
-            if (keys.ArrowDown && player.y + player.height < gameArea.offsetHeight) {
+            if (keys.ArrowDown && !isAtBottom(player, gameArea)) {
                 player.y += game.speed * game.moveMultilier;
             }
 
@@ -72,7 +78,7 @@
             }
 
             wizard.style.left = player.x + 'px';
-            wizard.style.top = player.y + 'px';
+            wizard.style.top = player.y + 'px';            
 
             window.requestAnimationFrame(gameAction);
         }
@@ -83,6 +89,10 @@
 
         function onKeyUp(e) {
             keys[e.code] = false;            
+        }
+
+        function isAtBottom(player, gameAreaElement){
+            return !(player.y + player.height < gameAreaElement.offsetHeight)
         }
 
     </script>
