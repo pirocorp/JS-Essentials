@@ -31,12 +31,14 @@
             x: 20,
             width: 0,
             height: 0,
+            lastFireballTimestamp: 0,
         };
 
         let game = {
             speed: 2,
             moveMultilier: 4,
             fireBallMultiplier: 5,
+            fireInterval: 500,
         };
 
         let scene = {
@@ -60,7 +62,7 @@
             window.requestAnimationFrame(gameAction);
         }
 
-        function gameAction() {
+        function gameAction(timestamp) {
             const wizard = document.querySelector('.wizard');
             scene.score += 0.005;
 
@@ -97,9 +99,10 @@
                 player.x += game.speed * game.moveMultilier;
             }
 
-            if(keys.Space) {
+            if(keys.Space && timestamp - player.lastFireballTimestamp > game.fireInterval) {
                 wizard.classList.add('wizard-fire');        
                 addFireBall();
+                player.lastFireballTimestamp = timestamp;
             } else {
                 wizard.classList.remove('wizard-fire'); 
             }
