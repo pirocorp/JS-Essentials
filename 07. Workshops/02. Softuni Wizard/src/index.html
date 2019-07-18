@@ -24,6 +24,13 @@
         document.addEventListener('keyup', onKeyUp);
 
         let keys = {};
+        let player = {
+            y: 20,
+            x: 20,
+        };
+        let game = {
+            speed: 2,
+        };
 
         function onGameStart() {
             gameStart.classList.add('hide');
@@ -31,8 +38,8 @@
             const wizard = document.createElement('div');
             wizard.classList.add('wizard');
 
-            wizard.style.top = '20px';
-            wizard.style.left = '20px';
+            wizard.style.left = player.x + 'px';
+            wizard.style.top = player.y + 'px';
 
             gameArea.appendChild(wizard);
 
@@ -40,7 +47,28 @@
         }
 
         function gameAction() {
-            console.log('Action');
+            const wizard = document.querySelector('.wizard');
+
+            if(keys.ArrowUp) {
+                player.y -= game.speed;
+                wizard.style.top = player.y + 'px';
+            }
+
+            if (keys.ArrowDown) {
+                player.y += game.speed;
+                wizard.style.top = player.y + 'px';
+            }
+
+            if (keys.ArrowLeft) {
+                player.x -= game.speed;
+                wizard.style.left = player.x + 'px';
+            }
+
+            if (keys.ArrowRight) {
+                player.x += game.speed;
+                wizard.style.left = player.x + 'px';
+            }
+
             window.requestAnimationFrame(gameAction);
         }
 
