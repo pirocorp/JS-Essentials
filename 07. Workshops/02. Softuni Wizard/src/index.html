@@ -10,13 +10,13 @@
         <div class="game-score"><span class="points">0</span> pts.</div>
         <div class="game-start">Press to Play!</div>
         <div class="game-area"></div>
-        <div class="game-over"></div>
+        <div class="game-over hide">Game Over!</div>
     </div>
 
     <script>
         const gameStart = document.querySelector('.game-start');
-        const gameArea= document.querySelector('.game-area');
-        const gameOver= document.querySelector('.game-over');
+        const gameArea = document.querySelector('.game-area');
+        const gameOver = document.querySelector('.game-over');
         const gameScore = document.querySelector('.game-score');
         const gamePoints = gameScore.querySelector('.points');
 
@@ -45,6 +45,7 @@
         };
 
         let scene = {
+            isActive: true,
             score: 0,
             lascCloudTimestamp: 0,
             lasctBugTimestamp: 0,
@@ -169,7 +170,7 @@
             let collison = Array.from(bugs).some(b => isCollision(wizard, b));
 
             if(collison) {
-                alert('You are dead');
+                gameOverAction();
             }
 
             //Apply movement
@@ -179,7 +180,9 @@
             //Apply score
             gamePoints.textContent = Math.round(scene.score);   
 
-            window.requestAnimationFrame(gameAction);
+            if(scene.isActive) {
+                window.requestAnimationFrame(gameAction);
+            }
         }
 
         function isCollision(firstElement, secondElement) {
@@ -191,6 +194,11 @@
                     firstRect.right < secondRect.left ||
                     firstRect.left > secondRect.right
             );
+        }
+
+        function  gameOverAction() {
+            scene.isActive = false;
+            gameOver.classList.remove('hide');
         }
 
         function addFireBall() {
