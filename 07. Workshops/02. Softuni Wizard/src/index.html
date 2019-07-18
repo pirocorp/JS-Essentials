@@ -63,6 +63,13 @@
             const wizard = document.querySelector('.wizard');
             scene.score += 0.005;
 
+            //Modify fireballs positions
+            let fireBalls = document.querySelectorAll('.fire-ball');
+            fireBalls.forEach(f => {
+                f.x += game.speed;
+                f.style.left = f.x + 'px';
+            });
+
             //Apply Gravity
             if(!isAtBottom(player, gameArea)) {
                 player.y += game.speed;
@@ -86,7 +93,8 @@
             }
 
             if(keys.Space) {
-                wizard.classList.add('wizard-fire');                
+                wizard.classList.add('wizard-fire');        
+                addFireBall();
             } else {
                 wizard.classList.remove('wizard-fire'); 
             }
@@ -99,6 +107,20 @@
             gamePoints.textContent = Math.round(scene.score);   
 
             window.requestAnimationFrame(gameAction);
+        }
+
+        function addFireBall() {
+            let fireBall = document.createElement('div');
+
+            if (player.x + player.width + 40 < gameArea.offsetWidth) {
+                fireBall.classList.add('fire-ball');
+                fireBall.x = player.x + player.width;
+                fireBall.style.left = fireBall.x + 'px';
+                fireBall.y = player.y + 28;
+                fireBall.style.top = fireBall.y + 'px';
+            }
+
+            gameArea.appendChild(fireBall);
         }
 
         function onKeyDown(e) {
