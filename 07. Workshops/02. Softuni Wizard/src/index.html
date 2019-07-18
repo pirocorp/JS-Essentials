@@ -30,6 +30,7 @@
         };
         let game = {
             speed: 2,
+            moveMultilier: 4,
         };
 
         function onGameStart() {
@@ -50,24 +51,23 @@
             const wizard = document.querySelector('.wizard');
 
             if(keys.ArrowUp) {
-                player.y -= game.speed;
+                player.y -= game.speed * game.moveMultilier;
             }
 
             if (keys.ArrowDown) {
-                player.y += game.speed;
+                player.y += game.speed * game.moveMultilier;
             }
 
             if (keys.ArrowLeft) {
-                player.x -= game.speed;
+                player.x -= game.speed * game.moveMultilier;
             }
 
             if (keys.ArrowRight) {
-                player.x += game.speed;
+                player.x += game.speed * game.moveMultilier;
             }
 
             wizard.style.left = player.x + 'px';
             wizard.style.top = player.y + 'px';
-
 
             window.requestAnimationFrame(gameAction);
         }
