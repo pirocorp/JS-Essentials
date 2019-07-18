@@ -27,6 +27,8 @@
         let player = {
             y: 20,
             x: 20,
+            width: 0,
+            height: 0,
         };
         let game = {
             speed: 2,
@@ -44,25 +46,28 @@
 
             gameArea.appendChild(wizard);
 
+            player.width = wizard.offsetWidth;
+            player.height = wizard.offsetHeight;
+
             window.requestAnimationFrame(gameAction);
         }
 
         function gameAction() {
             const wizard = document.querySelector('.wizard');
 
-            if(keys.ArrowUp) {
+            if(keys.ArrowUp && player.y > 0) {
                 player.y -= game.speed * game.moveMultilier;
             }
 
-            if (keys.ArrowDown) {
+            if (keys.ArrowDown && player.y + player.height < gameArea.offsetHeight) {
                 player.y += game.speed * game.moveMultilier;
             }
 
-            if (keys.ArrowLeft) {
+            if (keys.ArrowLeft && player.x > 0) {
                 player.x -= game.speed * game.moveMultilier;
             }
 
-            if (keys.ArrowRight) {
+            if (keys.ArrowRight && player.x + player.width < gameArea.offsetWidth) {
                 player.x += game.speed * game.moveMultilier;
             }
 
