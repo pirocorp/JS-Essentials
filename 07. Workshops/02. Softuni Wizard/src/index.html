@@ -42,6 +42,7 @@
             fireInterval: 500,
             cloudSpawnInterval: 3000,
             bugSpawnInterval: 500,
+            bugKillScore: 100,
         };
 
         let scene = {
@@ -172,6 +173,16 @@
             if(collison) {
                 gameOverAction();
             }
+
+            bugs.forEach(b => {
+                fireBalls.forEach(f => {
+                    if(isCollision(f, b)) {
+                        f.parentElement.removeChild(f);
+                        b.parentElement.removeChild(b);
+                        scene.score += game.bugKillScore;
+                    }
+                });
+            });
 
             //Apply movement
             wizard.style.left = player.x + 'px';
