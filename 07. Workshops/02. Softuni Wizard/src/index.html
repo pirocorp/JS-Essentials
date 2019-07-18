@@ -61,7 +61,7 @@
 
         function gameAction() {
             const wizard = document.querySelector('.wizard');
-            scene.score++;
+            scene.score += 0.005;
 
             //Apply Gravity
             if(!isAtBottom(player, gameArea)) {
@@ -85,12 +85,18 @@
                 player.x += game.speed * game.moveMultilier;
             }
 
+            if(keys.Space) {
+                wizard.classList.add('wizard-fire');                
+            } else {
+                wizard.classList.remove('wizard-fire'); 
+            }
+
             //Apply movement
             wizard.style.left = player.x + 'px';
             wizard.style.top = player.y + 'px';         
 
             //Apply score
-            gamePoints.textContent = scene.score;   
+            gamePoints.textContent = Math.round(scene.score);   
 
             window.requestAnimationFrame(gameAction);
         }
