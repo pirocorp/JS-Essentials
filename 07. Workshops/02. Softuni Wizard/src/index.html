@@ -38,13 +38,16 @@
             speed: 2,
             moveMultilier: 4,
             fireBallMultiplier: 5,
+            bugSpeedMultiplier: 3,
             fireInterval: 500,
-            cloudSpawnInterval: 2000,
+            cloudSpawnInterval: 3000,
+            bugSpawnInterval: 500,
         };
 
         let scene = {
             score: 0,
             lascCloudTimestamp: 0,
+            lasctBugTimestamp: 0,
         };
 
         function onGameStart() {
@@ -67,6 +70,31 @@
         function gameAction(timestamp) {
             const wizard = document.querySelector('.wizard');
             scene.score += 0.005;
+
+            //Add bugs
+            if(timestamp - scene.lasctBugTimestamp > game.bugSpawnInterval + 10000 * Math.random()) {
+                let bug = document.createElement('div');
+                bug.classList.add('bug');
+
+                gameArea.appendChild(bug);
+
+                bug.x = gameArea.offsetWidth - bug.offsetWidth;
+                bug.style.left = bug.x + 'px';
+                bug.style.top = (gameArea.offsetHeight - bug.offsetHeight) * Math.random() + 'px';
+
+                scene.lasctBugTimestamp = timestamp;
+            }
+
+            //Modify Bug positions
+            let bugs = document.querySelectorAll('.bug');
+            bugs.forEach(b => {
+                b.x -= game.speed * game.bugSpeedMultiplier;
+                b.style.left = b.x + 'px';
+
+                if (b.x + b.offsetWidth <= 0) {
+                    b.parentElement.removeChild(b);
+                }
+            });
 
             //Add clouds
             if(timestamp - scene.lascCloudTimestamp > game.cloudSpawnInterval + 50000 * Math.random()) {
