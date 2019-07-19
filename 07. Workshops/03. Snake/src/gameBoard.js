@@ -18,7 +18,7 @@
             gameBoard += "<tr>"
 
             for (let j = 0; j < size; j++) {
-                gameBoard += `<td id='${j}-${i}'></td>`;
+                gameBoard += `<td id='${j}x${i}'></td>`;
             }
 
             gameBoard += "</tr>"            
@@ -46,7 +46,7 @@
             gameOver();
         }
 
-        if (snakeData.body.includes(`${snakeData.headPositionX}-${snakeData.headPositionY}`)) {
+        if (snakeData.body.includes(`${snakeData.headPositionX}x${snakeData.headPositionY}`)) {
             gameOver();
         }
     }
@@ -63,7 +63,7 @@
         if( snakeData.headPositionX === food.x && 
             snakeData.headPositionY === food.y ) {
             
-            document.getElementById(`${food.x}-${food.y}`).classList.remove('food');
+            document.getElementById(`${food.x}x${food.y}`).classList.remove('food');
             gainPoint();
             snake.grow();
             generateFood();
@@ -77,7 +77,10 @@
             snake.moveHead();
             checkSnakeHeadPosition();
             checkSnackeEating();
-            snake.updateSnakePosition();
+
+            const snakeData = snake.getUpdateSnakePosition();
+
+            snake.setSnake(snakeData);
         }, configData.speed);
     }
 
@@ -101,14 +104,14 @@
 
         const snakeData = snake.getSnake();
 
-        if (snakeData.body.includes(`${x}-${y}`)){
+        if (snakeData.body.includes(`${x}x${y}`)){
             return generateFood();
         }
 
         food.x = x;
         food.y = y;
 
-        document.getElementById(`${x}-${y}`).classList.add('food');
+        document.getElementById(`${x}x${y}`).classList.add('food');
     }
 
     function start() {

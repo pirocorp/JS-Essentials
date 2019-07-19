@@ -1,5 +1,5 @@
 ; const snake = (function () {
-    const snakeData = {
+    let snakeData = {
         headPositionX: null,
         headPositionY: null,
         body: [],
@@ -11,7 +11,7 @@
         snakeData.headPositionY = parseInt(boardSize / 2);
 
         for (let i = 0; i < snakeSize; i++) {
-            snakeData.body.push(`${snakeData.headPositionX - i}-${snakeData.headPositionY}`);         
+            snakeData.body.push(`${snakeData.headPositionX - i}x${snakeData.headPositionY}`);         
         }
 
         snakeData.body.forEach(item => {
@@ -27,14 +27,33 @@
         snakeData.move();
     }
 
-    function updateSnakePosition() {
-        const head = `${snakeData.headPositionX}-${snakeData.headPositionY}`;
+    //Pure function example
+    function getPotentialSnakePosition(snake) {
+        const snakeClone = JSON.parse(JSON.stringify(snake));        
+        
+        const head = `${snakeClone.headPositionX}x${snakeClone.headPositionY}`;
+        const tail = snakeClone.body.pop();
 
-        snakeData.body.unshift(head);
-        const tail = snakeData.body.pop();
+        return {
+            head,
+            tail
+        };
+    }
 
-        document.getElementById(tail).classList.remove('snake');
-        document.getElementById(head).classList.add('snake');
+    //Another pure function
+    function getUpdateSnakePosition() {
+        const snakePotentialInfo = getPotentialSnakePosition(snakeData);
+
+        const snakeClone = JSON.parse(JSON.stringify(snakeData));
+        snakeClone.move = snakeData.move;
+
+        snakeClone.body.unshift(snakePotentialInfo.head);
+        snakeClone.body.pop();
+
+        uiDrawer.draw(snakePotentialInfo.head, "snake");
+        uiDrawer.draw(snakePotentialInfo.tail, "");
+
+        return snakeClone;
     }
 
     function setMoveDirection(direction) {
@@ -53,9 +72,15 @@
         return snakeData;
     }
 
+    function setSnake(snake) {
+        snakeData = snake;
+
+        return snakeData;
+    }
+
     function grow() {
-        snakeData.body.unshift(`${snakeData.headPositionX}-${snakeData.headPositionY}`);
-        document.getElementById(`${snakeData.headPositionX}-${snakeData.headPositionY}`).classList.add('snake');
+        snakeData.body.unshift(`${snakeData.headPositionX}x${snakeData.headPositionY}`);
+        document.getElementById(`${snakeData.headPositionX}x${snakeData.headPositionY}`).classList.add('snake');
         
         //This lead to imideatly growing snake but if food is on corner you cant get it
         //Without it growth happens when new elemet goes to end of the snacke
@@ -67,7 +92,8 @@
         moveHead,
         setMoveDirection,
         getSnake,
-        updateSnakePosition,
+        setSnake,
+        getUpdateSnakePosition,
         grow
     }
 })();
