@@ -87,6 +87,20 @@ function gameAction(timestamp) {
         }
     }
 
+    function addFireBall() {
+        let fireBall = document.createElement('div');
+
+        if (player.x + player.width + 40 < gameArea.offsetWidth) {
+            fireBall.classList.add('fire-ball');
+            fireBall.x = player.x + player.width;
+            fireBall.style.left = fireBall.x + 'px';
+            fireBall.y = player.y + 28;
+            fireBall.style.top = fireBall.y + 'px';
+        }
+
+        gameArea.appendChild(fireBall);
+    }
+
     function modifyBugPositions() {
         let bugs = document.querySelectorAll('.bug');
         bugs.forEach(b => {
@@ -129,6 +143,10 @@ function gameAction(timestamp) {
         }
     }
 
+    function isAtBottom(player, gameAreaElement) {
+        return !(player.y + player.height < gameAreaElement.offsetHeight)
+    }
+
     function registerUserInput() {
         if (keys.ArrowUp && player.y > 0) {
             player.y -= game.speed * game.moveMultilier;
@@ -157,6 +175,22 @@ function gameAction(timestamp) {
         }
     }
 
+    function gameOverAction() {
+        scene.isActive = false;
+        gameOver.classList.remove('hide');
+    }
+
+    function isCollision(firstElement, secondElement) {
+        let firstRect = firstElement.getBoundingClientRect();
+        let secondRect = secondElement.getBoundingClientRect();
+
+        return !(firstRect.top > secondRect.bottom ||
+            firstRect.bottom < secondRect.top ||
+            firstRect.right < secondRect.left ||
+            firstRect.left > secondRect.right
+        );
+    }
+
     function collisionDetection() {
         let bugs = document.querySelectorAll('.bug');
         let fireBalls = document.querySelectorAll('.fire-ball');
@@ -176,7 +210,7 @@ function gameAction(timestamp) {
                 }
             });
         });
-    }
+    }    
 
     function applyMovement() {
         wizard.style.left = player.x + 'px';
@@ -189,7 +223,7 @@ function gameAction(timestamp) {
         if (scene.isActive) {
             window.requestAnimationFrame(gameAction);
         }
-    }
+    }    
 
     addBugs();   
     addClouds(); 
@@ -203,44 +237,10 @@ function gameAction(timestamp) {
     applyScore();    
 }
 
-function isCollision(firstElement, secondElement) {
-    let firstRect = firstElement.getBoundingClientRect();
-    let secondRect = secondElement.getBoundingClientRect();
-
-    return !(firstRect.top > secondRect.bottom ||
-        firstRect.bottom < secondRect.top ||
-        firstRect.right < secondRect.left ||
-        firstRect.left > secondRect.right
-    );
-}
-
-function gameOverAction() {
-    scene.isActive = false;
-    gameOver.classList.remove('hide');
-}
-
-function addFireBall() {
-    let fireBall = document.createElement('div');
-
-    if (player.x + player.width + 40 < gameArea.offsetWidth) {
-        fireBall.classList.add('fire-ball');
-        fireBall.x = player.x + player.width;
-        fireBall.style.left = fireBall.x + 'px';
-        fireBall.y = player.y + 28;
-        fireBall.style.top = fireBall.y + 'px';
-    }
-
-    gameArea.appendChild(fireBall);
-}
-
 function onKeyDown(e) {
     keys[e.code] = true;
 }
 
 function onKeyUp(e) {
     keys[e.code] = false;
-}
-
-function isAtBottom(player, gameAreaElement) {
-    return !(player.y + player.height < gameAreaElement.offsetHeight)
 }
