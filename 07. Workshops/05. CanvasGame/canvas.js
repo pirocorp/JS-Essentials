@@ -60,19 +60,55 @@ let reset = function () {
     monster.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
+let monsterMove = function(modifier) {
+    let mod = Math.random() < 0.6  ? 1 : -1;
+
+    let direction = Math.random() * 10;
+
+    if (direction > 2) {
+        monster.x += mod * hero.speed * modifier;
+        
+    } else if (direction > 1) {
+        monster.y += mod * hero.speed * modifier;
+    }   else {
+        monster.x += mod * hero.speed * modifier;
+        monster.y += mod * hero.speed * modifier;
+    }
+
+    if (monster.y < -32) {
+        monster.y = 480;
+    }
+
+    if (monster.y > 480) {
+        monster.y = -32;
+    }
+
+    if (monster.x < -32) {
+        monster.x = 512;
+    }
+
+    if (monster.x > 512) {
+        monster.x = -32;
+    }
+}
+
 // Update game objects
 let update = function (modifier) {
     if (38 in keysDown) { // Player holding up
         hero.y -= hero.speed * modifier;
+        monsterMove(modifier);
     }
     if (40 in keysDown) { // Player holding down
         hero.y += hero.speed * modifier;
+        monsterMove(modifier);
     }
     if (37 in keysDown) { // Player holding left
         hero.x -= hero.speed * modifier;
+        monsterMove(modifier);
     }
     if (39 in keysDown) { // Player holding right
         hero.x += hero.speed * modifier;
+        monsterMove(modifier);
     }
 
     if (hero.y < -32) {
@@ -90,6 +126,7 @@ let update = function (modifier) {
     if(hero.x > 512) {
         hero.x = -32;
     }
+
 
     // Are they touching?
     if (
