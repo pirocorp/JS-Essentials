@@ -3,12 +3,11 @@ function solve(arr) {
 
     for (let i = 0; i < arr.length; i++) {
         const startIndex = i;
-        const endIndex = getSpecialSequence(startIndex, arr);
+        const endIndex = getSpecialSequenceLastIndex(startIndex, arr);
         
         if(startIndex !== endIndex) {
             i = endIndex;
             const currentSpecialSequence = arr.slice(startIndex, endIndex + 1);
-            //console.log(currentSpecialSequence);
 
             if (currentSpecialSequence.length > specialSequence.length) {
                 specialSequence = currentSpecialSequence;
@@ -16,7 +15,7 @@ function solve(arr) {
         }
     }
 
-    function getSpecialSequence(startIndex, arr) {
+    function getSpecialSequenceLastIndex(startIndex, arr) {
         let lastIndex = startIndex;
         let lastElement = arr[startIndex];
         
